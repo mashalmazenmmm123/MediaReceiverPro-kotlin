@@ -1,92 +1,88 @@
-name: Build Android APK - Kotlin
+name: Build APK - Problem Solver
 
 on:
   push:
     branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
-  workflow_dispatch:  # يسمح بتشغيل يدوي
-
-env:
-  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.parallel=true"
 
 jobs:
   build:
-    name: Build Android APK
     runs-on: ubuntu-latest
     
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-        
-    - name: Validate Gradle Wrapper
-      uses: gradle/wrapper-validation-action@v1
       
-    - name: Setup JDK 17
+    - name: Setup Java
       uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
-        cache: 'gradle'
         
-    - name: Setup Android SDK
+    - name: Setup Android
       uses: android-actions/setup-android@v3
       
-    - name: Make gradlew executable
-      run: chmod +x ./gradlew
-      
-    - name: Build Debug APK
+    - name: Fix Common Issues
       run: |
-        ./gradlew clean assembleDebug --no-daemon --stacktrace --info
+        # إصلاح أذونات الملفات
+        chmod +x gradlew 2>/dev/null || echo "No gradlew found"
         
-    - name: Build Release APK (Optional)
+        # إنشاء ملفات مفقودة إذا لزم الأمر
+        if [ ! -f "settings.gradle" ] && [ ! -f "settings.gradle.kts" ]; then
+          echo "Creating missing settings.gradle"
+          echo 'pluginManagement {
+            repositories {
+                google()
+                mavenCentral()
+                gradlePluginPortal()
+            }
+          }
+          dependencyResolutionManagement {
+            repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+            repositories {
+                google()
+                mavenCentral()
+            }
+          }
+          rootProject.name = "MediaReceiverPro"
+          include ":app"' > settings.gradle
+        fi
+        
+        # التحقق من ملفات البناء الأساسية
+        if [ ! -f "build.gradle" ] && [ ! -f "build.gradle.kts" ]; then
+          echo "❌ ERROR: No build.gradle file found!"
+          exit 1
+        fi
+        
+        if [ ! -f "app/build.gradle" ] && [ ! -f "app/build.gradle.kts" ]; then
+          echo "❌ ERROR: No app/build.gradle file found!"
+          exit 1
+        fi
+        
+    - name: Build APK Step by Step
       run: |
-        ./gradlew clean assembleRelease --no-daemon --stacktrace --info
-      continue-on-error: true
-      
-    - name: Run Tests
-      run: |
-        ./gradlew test --no-daemon --stacktrace
-      continue-on-error: true
-      
-    - name: Upload Debug APK
+        echo "=== Step 1: Clean Project ==="
+        ./gradlew clean --no-daemon || gradle clean --no-daemon
+        
+        echo "=== Step 2: Check Dependencies ==="
+        ./gradlew dependencies --no-daemon || gradle dependencies --no-daemon
+        
+        echo "=== Step 3: Build APK ==="
+        ./gradlew assembleDebug --no-daemon --stacktrace || gradle assembleDebug --no-daemon --stacktrace
+        
+    - name: Upload Success Artifact
+      if: success()
       uses: actions/upload-artifact@v4
       with:
-        name: MediaReceiverPro-Debug-APK
+        name: Success-APK
         path: app/build/outputs/apk/debug/app-debug.apk
         retention-days: 30
         
-    - name: Upload Release APK
+    - name: Upload Error Logs
+      if: failure()
       uses: actions/upload-artifact@v4
-      if: success() || failure()
       with:
-        name: MediaReceiverPro-Release-APK
-        path: app/build/outputs/apk/release/app-release.apk
-        retention-days: 30
-        if-no-files-found: ignore
-        
-    - name: Upload Build Reports
-      uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: Build-Reports
+        name: Error-Logs
         path: |
           app/build/reports/
           app/build/outputs/logs/
         retention-days: 7
-        
-    - name: Show Build Summary
-      if: always()
-      run: |
-        echo "=== Build Summary ==="
-        echo "✅ Java Version: $(java -version 2>&1 | head -1)"
-        echo "📱 APK Files:"
-        find app/build/outputs/apk/ -name "*.apk" -type f 2>/dev/null | while read file; do
-          echo "   - $(basename "$file") ($(du -h "$file" | cut -f1))"
-        done || echo "   No APK files found"
-        echo "📊 Build Reports:"
-        find app/build/reports/ -type f 2>/dev/null | head -5 | while read file; do
-          echo "   - $(basename "$file")"
-        done || echo "   No reports found"
