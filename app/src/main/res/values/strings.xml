@@ -1,0 +1,37 @@
+<resources>
+    <!-- Application Name -->
+    <string name="app_name">Media Receiver Pro</string>
+    
+    <!-- Button Texts -->
+    <string name="start_server">Start Server</string>
+    <string name="stop_server">Stop Server</string>
+    <string name="copy_url">Copy URL</string>
+    <string name="open_folder">Open Folder</string>
+    
+    <!-- Section Titles -->
+    <string name="server_status">Server Status</string>
+    <string name="public_url">Public URL</string>
+    <string name="visitors">Visitors</string>
+    <string name="files_received">Files Received</string>
+    <string name="activity_log">Activity Log</string>
+    
+    <!-- Status Messages -->
+    <string name="status_running">RUNNING</string>
+    <string name="status_stopped">STOPPED</string>
+    <string name="status_active">ACTIVE</string>
+    <string name="status_disabled">DISABLED</string>
+    
+    <!-- Toast Messages -->
+    <string name="url_copied">URL copied to clipboard</string>
+    <string name="no_url_available">No public URL available</string>
+    <string name="server_already_running">Server is already running</string>
+    <string name="no_file_manager">No file manager app found</string>
+    <string name="cannot_open_browser">Cannot open browser</string>
+    
+    <!-- Log Messages -->
+    <string name="log_app_started">Application started successfully!</string>
+    <string name="log_storage_initialized">Storage initialized</string>
+    <string name="log_server_started">Local server started on port 8080</string>
+    <string name="log_server_stopped">Server stopped</string>
+    <string name="log_tunnel_started">Starting public tunnel via serveo.net…</string>
+</resources>
