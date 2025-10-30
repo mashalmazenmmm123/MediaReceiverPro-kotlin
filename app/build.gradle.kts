@@ -1,14 +1,15 @@
+// app/build.gradle.kts
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
 }
 
 android {
-    namespace = "com.mediareceiver.pro"
+    namespace = "com.yourapp.package"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.mediareceiver.pro"
+        applicationId = "com.yourapp.package"
         minSdk = 21
         targetSdk = 34
         versionCode = 1
@@ -24,32 +25,20 @@ android {
             )
         }
     }
-    
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    
-    kotlinOptions {
-        jvmTarget = "1.8"
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
-    // إضافة دعم الـ assets
-    buildFeatures {
-        viewBinding = true
-    }
-    
-    // تأكيد تضمين الـ assets
-    sourceSets {
-        getByName("main") {
-            assets.srcDirs("src/main/assets")
-        }
+    kotlinOptions {
+        jvmTarget = "17"
     }
 }
 
 dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.10.0")
+    implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 }
