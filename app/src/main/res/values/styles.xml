@@ -1,0 +1,52 @@
+<resources>
+    <!-- Base application theme -->
+    <style name="AppTheme" parent="Theme.Material3.Light.DarkActionBar">
+        <item name="colorPrimary">@color/primary_color</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/secondary_color</item>
+        <item name="android:windowBackground">@color/background_color</item>
+        <item name="android:statusBarColor">@color/primary_dark</item>
+        <item name="android:navigationBarColor">@color/primary_dark</item>
+    </style>
+
+    <!-- Modern Button Style -->
+    <style name="ModernButton" parent="Widget.Material3.Button">
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="android:elevation">2dp</item>
+        <item name="android:stateListAnimator">@null</item>
+    </style>
+
+    <!-- Card Style -->
+    <style name="ModernCard" parent="Widget.Material3.CardView">
+        <item name="cardCornerRadius">12dp</item>
+        <item name="cardElevation">4dp</item>
+        <item name="cardUseCompatPadding">true</item>
+    </style>
+
+    <!-- Text Styles -->
+    <style name="HeaderText">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/primary_text_color</item>
+    </style>
+
+    <style name="SubheaderText">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/secondary_text_color</item>
+    </style>
+
+    <style name="BodyText">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/primary_text_color</item>
+    </style>
+
+    <!-- Log Text Style -->
+    <style name="LogText">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/log_text_color</item>
+        <item name="android:fontFamily">monospace</item>
+        <item name="android:lineSpacingExtra">2dp</item>
+    </style>
+</resources>
