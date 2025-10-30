@@ -1,4 +1,4 @@
-name: Build APK - Simple
+name: Build APK - Verified
 
 on:
   push:
@@ -12,24 +12,57 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       
-    - name: Setup Java
+    - name: Verify Project Structure
+      run: |
+        echo "=== Project Structure ==="
+        find . -name "*.gradle" -type f | head -10
+        echo "=== Source Files ==="
+        find app/src/main -name "*.kt" -o -name "*.java" | head -10
+        echo "=== Resource Files ==="
+        find app/src/main/res -type f | head -10
+        echo "=== Asset Files ==="
+        find app/src/main/assets -type f 2>/dev/null | head -10 || echo "No assets found"
+        
+    - name: Setup Environment
       uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
         
-    - name: Setup Android
+    - name: Setup Android SDK
       uses: android-actions/setup-android@v3
       
-    - name: Build APK
+    - name: Build with Verification
       run: |
-        # تثبيت Gradle يدوياً لتجنب المشاكل
-        wget -q https://services.gradle.org/distributions/gradle-8.4-bin.zip
-        unzip -q gradle-8.4-bin.zip
-        ./gradle-8.4/bin/gradle clean assembleDebug --no-daemon --stacktrace
+        echo "=== Building APK ==="
+        chmod +x gradlew || echo "No gradlew, using direct gradle"
         
-    - name: Upload APK
+        if [ -f "./gradlew" ]; then
+          ./gradlew clean assembleDebug --stacktrace
+        else
+          # تثبيت واستخدام Gradle مباشرة
+          wget -q https://services.gradle.org/distributions/gradle-8.4-bin.zip
+          unzip -q gradle-8.4-bin.zip
+          ./gradle-8.4/bin/gradle clean assembleDebug --stacktrace
+        fi
+        
+    - name: Check Build Results
+      run: |
+        echo "=== Build Results ==="
+        if [ -f "app/build/outputs/apk/debug/app-debug.apk" ]; then
+          echo "✅ SUCCESS: APK built successfully!"
+          ls -la app/build/outputs/apk/debug/
+          echo "APK Size: $(du -h app/build/outputs/apk/debug/app-debug.apk | cut -f1)"
+        else
+          echo "❌ FAILED: APK not found!"
+          echo "Available files in build directory:"
+          find app/build/ -name "*.apk" -type f 2>/dev/null || echo "No APK files found"
+          exit 1
+        fi
+        
+    - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: App-APK
+        name: MediaReceiverPro-APK
         path: app/build/outputs/apk/debug/app-debug.apk
+        retention-days: 30
