@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary Colors -->
+    <color name="primary_color">#2196F3</color>
+    <color name="primary_dark">#1976D2</color>
+    <color name="primary_light">#BBDEFB</color>
+    
+    <!-- Secondary Colors -->
+    <color name="secondary_color">#FF9800</color>
+    <color name="secondary_dark">#F57C00</color>
+    
+    <!-- Status Colors -->
+    <color name="green">#4CAF50</color>
+    <color name="red">#F44336</color>
+    <color name="blue">#2196F3</color>
+    <color name="orange">#FF9800</color>
+    
+    <!-- Background Colors -->
+    <color name="background_color">#F5F5F5</color>
+    <color name="surface_color">#FFFFFF</color>
+    <color name="card_background">#FFFFFF</color>
+    
+    <!-- Text Colors -->
+    <color name="primary_text_color">#212121</color>
+    <color name="secondary_text_color">#757575</color>
+    <color name="hint_text_color">#BDBDBD</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    
+    <!-- Log Colors -->
+    <color name="log_text_color">#424242</color>
+    <color name="log_success_color">#4CAF50</color>
+    <color name="log_error_color">#F44336</color>
+    <color name="log_warning_color">#FF9800</color>
+    <color name="log_info_color">#2196F3</color>
+    
+    <!-- Button Colors -->
+    <color name="button_green">#4CAF50</color>
+    <color name="button_red">#F44336</color>
+    <color name="button_blue">#2196F3</color>
+    <color name="button_orange">#FF9800</color>
+    
+    <!-- URL Background -->
+    <color name="url_background_color">#E8F5E8</color>
+</resources>
